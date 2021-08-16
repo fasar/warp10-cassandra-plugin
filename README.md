@@ -1,4 +1,5 @@
-# Cassandra Module for Warp10 (not official)
+# Tuto Module for Warp10 (not official)
+
 
 
 
