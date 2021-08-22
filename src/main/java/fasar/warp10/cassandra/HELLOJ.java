@@ -1,4 +1,4 @@
-package fasar.warp10.tuto;
+package fasar.warp10.cassandra;
 
 import io.warp10.script.NamedWarpScriptFunction;
 import io.warp10.script.WarpScriptException;
@@ -10,7 +10,7 @@ public class HELLOJ extends NamedWarpScriptFunction implements WarpScriptStackFu
   private final String name;
 
   public HELLOJ(String helloj, String name) {
-    super(name);
+    super(helloj);
     this.name = name;
   }
 

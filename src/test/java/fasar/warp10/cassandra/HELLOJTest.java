@@ -1,4 +1,4 @@
-package fasar.warp10.tuto;
+package fasar.warp10.cassandra;
 
 import io.warp10.WarpConfig;
 import io.warp10.script.MemoryWarpScriptStack;
@@ -15,7 +15,7 @@ public class HELLOJTest {
         properties.append("warp.timeunits=us\n");
         properties.append("warpscript.tuto.helloName=Mec\n");
         WarpConfig.safeSetProperties(new StringReader(properties.toString()));
-        WarpScriptLib.register(new TutoExtension());
+        WarpScriptLib.register(new CassandraExtension());
     }
 
     @Test

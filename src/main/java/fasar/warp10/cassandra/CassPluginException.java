@@ -1,4 +1,4 @@
-package fasar.warp10.tuto;
+package fasar.warp10.cassandra;
 
 public class CassPluginException extends RuntimeException {
     public CassPluginException() {
