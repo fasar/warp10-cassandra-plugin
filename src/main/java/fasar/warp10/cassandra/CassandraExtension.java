@@ -27,6 +27,7 @@ public class CassandraExtension extends WarpScriptExtension {
     try {
       CassandraConnexion cassandraConnexion = new CassandraConnexion(cassConfig);
       functions.put("CSTATUS", new CSTATUS("CSTATUS", cassandraConnexion));
+      functions.put("CSELECT", new CSELECT("CSELECT", cassandraConnexion));
     } catch (Exception e) {
       throw new CassPluginException(e.getMessage(), e);
     }
