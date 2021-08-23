@@ -1,19 +1,25 @@
 package fasar.warp10.cassandra;
 
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.ColumnDefinitions;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 import fasar.cassandra.CassandraConnexion;
 import io.warp10.script.NamedWarpScriptFunction;
 import io.warp10.script.WarpScriptException;
 import io.warp10.script.WarpScriptStack;
 import io.warp10.script.WarpScriptStackFunction;
-import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CSELECT extends NamedWarpScriptFunction implements WarpScriptStackFunction  {
+public class CSELECT extends NamedWarpScriptFunction implements WarpScriptStackFunction {
     private CassandraConnexion cassandraConnexion;
 
-    public CSELECT(String functionName, CassandraConnexion cassandraConnexion) {
+    public CSELECT(
+            String functionName,
+            CassandraConnexion cassandraConnexion
+    ) {
         super(functionName);
         this.cassandraConnexion = cassandraConnexion;
     }
@@ -29,11 +35,27 @@ public class CSELECT extends NamedWarpScriptFunction implements WarpScriptStackF
         Session session = cassandraConnexion.getSession();
         ResultSet execute = session.execute(query);
 
-        for (Row row : execute) {
-            String s1 = row.getString(0);
-            String s2 = row.getString(1);
-            stack.push(Pair.of(s1, s2));
+        ColumnDefinitions columnDefinitions = execute.getColumnDefinitions();
+        List<ColumnDefinitions.Definition> definitions = columnDefinitions.asList();
+        int nbElement = definitions.size();
+        List<String> headers = new ArrayList<>(nbElement);
+        for (int i = 0; i < nbElement; i++) {
+            headers.add(definitions.get(i).getName());
         }
+
+        List<List<? extends Object>> values = new ArrayList<>();
+        values.add(headers);
+
+        for (Row row : execute) {
+            List<Object> resValues = new ArrayList<>(nbElement);
+            for (int i = 0; i < nbElement; i++) {
+                Object s1 = row.getObject(i);
+                resValues.add(s1);
+            }
+            values.add(resValues);
+        }
+
+        stack.push(values);
         return stack;
     }
 }

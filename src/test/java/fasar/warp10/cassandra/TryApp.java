@@ -26,7 +26,7 @@ public class TryApp {
     private static void testCSelect() throws WarpScriptException {
         MemoryWarpScriptStack stack = new MemoryWarpScriptStack(null, null);
         stack.maxLimits();
-        stack.exec("'SELECT * FROM ifis.properties' CSELECT");
+        stack.exec("'SELECT * FROM properties' CSELECT");
         // printing
         System.out.println(stack.dump(stack.depth()));
 
