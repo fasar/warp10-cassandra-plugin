@@ -25,7 +25,7 @@ public class CassandraConnexion {
     private Cluster cluster;
     private PoolingOptions poolingOptions;
     private LoadBalancingPolicy loadBalancingPolicy;
-    private Session session;
+    private Session session = new VoidCSession();
     private CassandraCnxConfig cassConfig;
 
     @Inject
