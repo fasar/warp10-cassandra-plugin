@@ -31,6 +31,9 @@ public class CSELECT extends NamedWarpScriptFunction implements WarpScriptStackF
             throw new WarpScriptException("expect the CQL Select Query String on the top of the stack.");
         }
         String query = (String) queryObj;
+        if (!query.toLowerCase().contains("select")) {
+            throw new WarpScriptException("expect the CQL Select Query String on the top of the stack.");
+        }
 
         Session session = cassandraConnexion.getSession();
         ResultSet execute = session.execute(query);
