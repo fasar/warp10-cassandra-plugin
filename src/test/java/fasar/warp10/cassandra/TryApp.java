@@ -17,10 +17,22 @@ public class TryApp {
         properties.append("\nwarp.timeunits=us\n");
         WarpConfig.safeSetProperties(new StringReader(properties.toString()));
         WarpScriptLib.register(new CassandraExtension());
-        testCStatus();
-        testCSelect();
+        testCFetch();
 
         System.exit(0);
+    }
+
+    private static void testCFetch() throws WarpScriptException {
+        MemoryWarpScriptStack stack = new MemoryWarpScriptStack(null, null);
+        stack.maxLimits();
+        stack.push("'SELECT name, ts, val FROM tag4_2020 limit 1000'");
+        stack.push("[ 1 -1 -1 -1 2 ]");
+        stack.push("CFETCH");
+        stack.progress();
+        // printing
+        System.out.println(stack.dump(stack.depth()));
+
+        stack.clear();
     }
 
     private static void testCSelect() throws WarpScriptException {
@@ -33,6 +45,18 @@ public class TryApp {
         stack.clear();
 
     }
+
+    private static void testCSelect2() throws WarpScriptException {
+        MemoryWarpScriptStack stack = new MemoryWarpScriptStack(null, null);
+        stack.maxLimits();
+        stack.exec("'SELECT * FROM tag4_2020 LIMIT 1000' CSELECT");
+        // printing
+        System.out.println(stack.dump(stack.depth()));
+
+        stack.clear();
+
+    }
+
 
     static void testCStatus() throws WarpScriptException {
         MemoryWarpScriptStack stack = new MemoryWarpScriptStack(null, null);
