@@ -13,6 +13,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 //
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 
 plugins {
   id 'java-library'
@@ -47,9 +48,15 @@ dependencies {
   //
   //implementation group: 'GROUP', name: 'NAME', version: 'VERSION', classifier: 'CLASSIFIER'
 
-  implementation "com.datastax.cassandra:cassandra-driver-core:3.11.0"
-  implementation "com.datastax.cassandra:cassandra-driver-mapping:3.11.0"
-  implementation "com.datastax.cassandra:cassandra-driver-extras:3.11.0"
+  implementation ("com.datastax.cassandra:cassandra-driver-core:3.11.0") {
+    exclude group: 'org.slf4j', module: 'slf4j-api'
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    exclude group: 'io.netty', module: 'netty-handler'
+  }
+  implementation ("com.datastax.cassandra:cassandra-driver-mapping:3.11.0")
+  implementation ("com.datastax.cassandra:cassandra-driver-extras:3.11.0")
+
+  implementation "io.netty:netty-handler:4.0.56.Final"
 
   // Use JUnit test framework.
   testImplementation 'junit:junit:4.13'
@@ -102,6 +109,13 @@ shadowJar {
     include project.group + '-' + project.name + '.conf'
   }
 }
+
+task relocateShadowJar(type: ConfigureShadowRelocation) {
+  target = tasks.shadowJar
+}
+
+tasks.shadowJar.dependsOn tasks.relocateShadowJar
+
 
 
 //
