@@ -7,6 +7,7 @@ import com.geoxp.GeoXPLib;
 import fasar.cassandra.CassandraConnexion;
 import io.warp10.continuum.gts.GTSHelper;
 import io.warp10.continuum.gts.GeoTimeSerie;
+import io.warp10.continuum.store.Constants;
 import io.warp10.script.NamedWarpScriptFunction;
 import io.warp10.script.WarpScriptException;
 import io.warp10.script.WarpScriptStack;
@@ -77,6 +78,7 @@ public class CFETCH extends NamedWarpScriptFunction implements WarpScriptStackFu
 
         for (Row row : execute) {
             long timestamp = row.getTimestamp(gtsMappingNum[0]).getTime();
+            timestamp = timestamp * Constants.TIME_UNITS_PER_MS;
             long location;
             if (gtsMappingNum[1] >= 0 && gtsMappingNum[2] >= 0) {
                 long lon = row.getLong(gtsMappingNum[1]);
