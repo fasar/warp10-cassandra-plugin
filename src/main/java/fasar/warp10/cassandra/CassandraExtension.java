@@ -21,7 +21,6 @@ public class CassandraExtension extends WarpScriptExtension {
     functions = new HashMap<String,Object>();
 
     String name = WarpConfig.getProperty("warpscript.tuto.helloName");
-    functions.put("HELLOJ", new HELLOJ("HELLOJ", name));
 
     CassandraCnxConfig cassConfig = buildCassConfig();
     try {

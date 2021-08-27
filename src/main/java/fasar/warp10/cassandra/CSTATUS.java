@@ -8,6 +8,7 @@ import io.warp10.script.WarpScriptStack;
 import io.warp10.script.WarpScriptStackFunction;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CSTATUS extends NamedWarpScriptFunction implements WarpScriptStackFunction {
 
@@ -21,8 +22,8 @@ public class CSTATUS extends NamedWarpScriptFunction implements WarpScriptStackF
     @Override
     public Object apply(WarpScriptStack stack) throws WarpScriptException {
         List<CHostMonit> monitor = cassandraConnexion.monitor();
-        stack.push("Hello CSTATUS");
-        stack.push(monitor);
+        List<String> monitorStr = monitor.stream().map(CHostMonit::toString).collect(Collectors.toList());
+        stack.push(monitorStr);
         return stack;
     }
 }

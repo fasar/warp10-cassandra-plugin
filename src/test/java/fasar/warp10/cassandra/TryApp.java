@@ -11,7 +11,7 @@ import java.io.*;
 public class TryApp {
     public static void main(String[] args) throws IOException, WarpScriptException {
         StringBuilder properties = new StringBuilder();
-        File pptF = new File("fasar.warp10.cassandra-extension.conf");
+        File pptF = new File("81-cassandra-plugin-extension.conf");
         System.out.println("Try to load " + pptF.getAbsolutePath());
         properties.append(FileUtils.readFileToString(pptF));
         properties.append("\nwarp.timeunits=us\n");
