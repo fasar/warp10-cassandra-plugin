@@ -34,6 +34,7 @@ public class CassandraConnexion {
     ) throws Exception {
         long t1 = System.currentTimeMillis();
         this.cassConfig = cassConfig;
+        String keyspace = cassConfig.getKeyspace();
 
         long t2 = System.currentTimeMillis();
         long t8 = 0;
@@ -44,6 +45,7 @@ public class CassandraConnexion {
         long nbRetry = 0;
         while (!isConnected) {
             List<String> contactPointsFeeder = getContactPointsFeeder(cassConfig.getContactPoints());
+
             for (String toTry : contactPointsFeeder) {
                 if (isConnected) {
                     break;
@@ -95,7 +97,7 @@ public class CassandraConnexion {
 
                     t10a = System.currentTimeMillis();
 
-                    printMetaData(cluster, cassConfig.getKeyspace(), cassConfig);
+                    printMetaData(cluster, keyspace, cassConfig);
                     t10 = System.currentTimeMillis();
 
                     isConnected = true;
@@ -121,16 +123,18 @@ public class CassandraConnexion {
             }
         }
 
-        long t6 = System.currentTimeMillis();
-
-        session.execute("use " + cassConfig.getKeyspace() + ";");
-        long t7 = System.currentTimeMillis();
+        try {
+            if (keyspace != null) {
+                session.execute("use " + keyspace + ";");
+            }
+        } catch (Exception e) {
+            LOG.error("Can't use keyspace {}", keyspace);
+        }
 
         LOG.debug("Cassandra Time _ Init Time: {} s", t2 - t1);
         LOG.debug("Cassandra Time _ Create cluster : {} ms", t9 - t8);
         LOG.debug("Cassandra Time _ Print meta data : {} ms", t10a - t10);
         LOG.debug("Cassandra Time _ Create session : {} ms", t4 - t3);
-        LOG.debug("Cassandra Time _ Use keyspace : {} ms", t7 - t6);
 
     }
 
